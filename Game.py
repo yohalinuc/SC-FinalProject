@@ -4,6 +4,11 @@ import random
 import pygame
 
 def colors():
+    '''
+    Returns
+    dictionary of colors used for game board
+
+    '''
     return {
         'red':(255, 0, 0),
         'yellow':(255, 255, 0),
@@ -18,69 +23,76 @@ def colors():
         }
 
 def board():
+    '''
+    Initialise the game board locations and ownerships
+    Returns
+    -------
+    list of locations on game board and information as provided by game
+
+    '''
     return [
         ['Go', 200],
         ['Property', 'Mediterranean Avenue', 'brown', 60, \
-         [2, 10, 30, 90, 160, 250], 50],
+         [2, 10, 30, 90, 160, 250], 50, 'Bank', 0],
         ['Community Chest'],
         ['Property', 'Baltic Avenue', 'brown', 60, \
-         [4, 20, 60, 180, 320, 450], 50],
+         [4, 20, 60, 180, 320, 450], 50, 'Bank', 0],
         ['Tax', 'Income Tax', 200],
-        ['Station', 'Reading Railroad', 200],
+        ['Station', 'Reading Railroad', 200, 'Bank'],
         ['Property', 'Oriental Avenue', 'cyan', 100, \
-         [6, 30, 90, 270, 400, 550], 50],
+         [6, 30, 90, 270, 400, 550], 50, 'Bank', 0],
         ['Chance'],
         ['Property', 'Vermont Avenue', 'cyan', 100, \
-         [6, 30, 90, 270, 400, 550], 50],
+         [6, 30, 90, 270, 400, 550], 50, 'Bank', 0],
         ['Property', 'Connecticut Avenue', 'cyan', 120, \
-         [8, 40, 100, 300, 450, 600], 50],
+         [8, 40, 100, 300, 450, 600], 50, 'Bank', 0],
         ['Go to Jail/Just Visiting'],
         ['Property', 'St. Charles Place', 'pink', 140, \
-         [10, 50, 150, 450, 625, 750], 100],
-        ['Utility', 'Electric Company', 150],
+         [10, 50, 150, 450, 625, 750], 100, 'Bank', 0],
+        ['Utility', 'Electric Company', 150, 'Bank'],
         ['Property', 'States Avenue', 'pink', 140, \
-         [10, 50, 150, 450, 625, 750], 100],
+         [10, 50, 150, 450, 625, 750], 100, 'Bank', 0],
         ['Property', 'Virginia Avenue', 'pink', 160, \
-         [12, 60, 180, 500, 700, 900], 100],
-        ['Station', 'Pennsylvania Railroad', 200],
+         [12, 60, 180, 500, 700, 900], 100, 'Bank', 0],
+        ['Station', 'Pennsylvania Railroad', 200, 'Bank'],
         ['Property', 'St. James Place', 'orange', 180, \
-         [14, 70, 200, 550, 750, 950], 100],
+         [14, 70, 200, 550, 750, 950], 100, 'Bank', 0],
         ['Community Chest'],
         ['Property', 'Tennessee Avenue', 'orange', 180, \
-         [14, 70, 200, 550, 750, 950], 100],
+         [14, 70, 200, 550, 750, 950], 100, 'Bank', 0],
         ['Property', 'New York Avenue', 'orange', 200, \
-         [16, 80, 220, 600, 800, 1000], 100],
+         [16, 80, 220, 600, 800, 1000], 100, 'Bank', 0],
         ['Free Parking'],
         ['Property', 'Kentucky Avenue', 'red', 220, \
-         [18, 90, 250, 700, 875, 1050], 150],
+         [18, 90, 250, 700, 875, 1050], 150, 'Bank'],
         ['Chance'],
         ['Property', 'Indiana Avenue', 'red', 220, \
-         [18, 90, 250, 700, 875, 1050], 150],
+         [18, 90, 250, 700, 875, 1050], 150, 'Bank'],
         ['Property', 'Illinois Avenue', 'red', 240, \
-         [20, 100, 300, 750, 925, 1100], 150],
-        ['Station', 'B & O Railroad', 200],
+         [20, 100, 300, 750, 925, 1100], 150, 'Bank'],
+        ['Station', 'B & O Railroad', 200, 'Bank'],
         ['Property', 'Atlantic Avenue', 'yellow', 260, \
-         [22, 110, 330, 800, 975, 1150], 150],
+         [22, 110, 330, 800, 975, 1150], 150, 'Bank'],
         ['Property', 'Ventnor Avenue', 'yellow', 260, \
-         [22, 110, 330, 800, 975, 1150], 150]
-        ['Utility', 'Water Works', 150],
+         [22, 110, 330, 800, 975, 1150], 150, 'Bank']
+        ['Utility', 'Water Works', 150, 'Bank'],
         ['Property', 'Marvin Gardens', 'yellow', 280, \
-         [24, 120, 360, 850, 1025, 1200], 150],
+         [24, 120, 360, 850, 1025, 1200], 150, 'Bank'],
         ['Go to Jail'],
         ['Property', 'Pacific Avenue', 'green', 300, \
-         [26, 130, 390, 900, 1100, 1275], 200],
+         [26, 130, 390, 900, 1100, 1275], 200, 'Bank'],
         ['Property', 'North Carolina Avenue', 'green', 300, \
-         [26, 130, 390, 900, 1100, 1275], 200],
+         [26, 130, 390, 900, 1100, 1275], 200, 'Bank'],
         ['Community Chest'],
         ['Property', 'Pennsylvania Avenue', 'green', 320, \
-         [28, 150, 450, 1000, 1200, 1400], 200],
-        ['Station', 'Short Line', 200],
+         [28, 150, 450, 1000, 1200, 1400], 200, 'Bank'],
+        ['Station', 'Short Line', 200, 'Bank'],
         ['Chance'],
         ['Property', 'Park Place', 'blue', 350, \
-         [35, 175, 500, 1100, 1300, 1500], 200],
-        ['Tax', 'Luxury Tax', 100],
+         [35, 175, 500, 1100, 1300, 1500], 200, 'Bank'],
+        ['Tax', 'Luxury Tax', 100, 'Bank'],
         ['Property', 'Boardwalk', 'blue', 400, \
-         [50, 200, 600, 1400, 1700, 2000], 200]
+         [50, 200, 600, 1400, 1700, 2000], 200, 'Bank']
         ]
 
 def CommunityCard():
@@ -151,26 +163,119 @@ class Die(object):
         return value, double
 
 class Deed(object):
-    def __init__(self, name, color, cost, rent, house_cost, owner):
+    def __init__(self, location):
+        self.type = location[0]
+        if location[0] == 'Property':
+            self.name = location[1]
+            self.color = location[2]
+            self.deed_cost = location[3]
+            self.rents = location[4]
+            self.house_cost = location[5]
+            self.owner = location[6]
+            self.house_level = 0
+        if location[0] == 'Station':
+            self.name = location[1]
+            self.deed_cost = location[2]
+            self.owner = location[3]
+
+    def buy(self, player):
+        if self.deed_cost > player.bal:
+            print('unaffordable')
+        else:
+            player.owned.append(self)
+            player.take_money(self.deed_cost)
+            self.owner = player
+            if self.type == 'Station':
+                player.railroad_own += 1
+            if self.type == 'Utility':
+                player.utility_own += 1
+
+    def sell(self, player):
+        self.owner = 'Bank'
+        player.add_money(self.deed_cost)
+        if self.type == 'Station':
+            player.railroad_own -= 1
+        if self.type == 'Utility':
+            player.utility_own -= 1
+
+    def build_house(self, player):
+        if self.house_cost > player.bal:
+            print('unaffordable')
+        elif self.house_level == 5:
+            self.max_houses = True
+        else:
+            self.house_level += 1
 
 
 
-
-class Player(object):
+class player(object):
     def __init__(self, playernumber, balance, property_owned, position):
         self.number = playernumber
-        self.balance = balance
-        self.owned = property_owned
+        self.bal = balance
+        self.deed_owned = property_owned
+        self.railroad_own = 0
+        self.utility_own = 0
         self.pos = position
+        self.double_count = 0
+        self.turn_in_jail = 0
+        self.bankrupt_flag = False
+        self.jail_flag = False
 
     def move(self):
         steps, double = Die()
+        
+        if double == True:
+            self.double_count += 1
+            if self.double_count == 3:
+                self.jail()
         self.pos += steps
         return self.pos
 
     def check_pos(self, board):
         self.pos = self.pos % 40
         locale = board[self.pos]
+        return locale
+
+    def add_money(self, amount):
+        self.bal += amount
+        return self.bal
+
+    def take_money(self, amount):
+        if self.bal < amount:
+            if len(self.deed_owned) < 0:
+                self.bankrupt_flag = True
+                self.bankrupt()
+        else:
+            self.bal -= amount
+
+    def jail(self):
+        self.pos = 10
+        self.double_count = 0
+        self.jail_flag = True
+
+    def jail_check(self):
+        if self.turn_in_jail < 3:
+            dice = Die()
+            val, double = dice.roll()
+            if double == True:
+                self.jail_flag == False
+                self.turn_in_jail = 0
+                self.pos += val
+            if self.jail_flag == True:
+                 self.turn_in_jail += 1
+        else:
+            self.jail_flag == False
+            self.turn_in_jail = 0
+
+
+    def bankrupt(self):
+        self.bal = 0
+        if len(self.deed_owned) != 0:
+            for deed in self.deed_owned:
+                deed.owner = 'Bank'
+
+
+
 
 # class Button(object):
 #     def __init__(self, screen, color):
@@ -207,4 +312,5 @@ if __name__ == '__main__':
     pygame.init()
     Run()
     pygame.quit()
+
 
