@@ -74,7 +74,7 @@ def board():
         ['Property', 'Atlantic Avenue', 'yellow', 260, \
          [22, 110, 330, 800, 975, 1150], 150, 'Bank'],
         ['Property', 'Ventnor Avenue', 'yellow', 260, \
-         [22, 110, 330, 800, 975, 1150], 150, 'Bank']
+         [22, 110, 330, 800, 975, 1150], 150, 'Bank'],
         ['Utility', 'Water Works', 150, 'Bank'],
         ['Property', 'Marvin Gardens', 'yellow', 280, \
          [24, 120, 360, 850, 1025, 1200], 150, 'Bank'],
@@ -118,24 +118,24 @@ def CommunityCard():
 def ChanceCard():
     return [
         ['Advance to Boardwalk'],
-        ['Advance to Go (Collect $200)', 200]
-        ['Advance to Illinois Avenue. If you pass Go, collect $200', 200]
-        ['Advance to St. Charles Place. If you pass Go, collect $200', 200]
+        ['Advance to Go (Collect $200)', 200],
+        ['Advance to Illinois Avenue. If you pass Go, collect $200', 200],
+        ['Advance to St. Charles Place. If you pass Go, collect $200', 200],
         ['Advance to the nearest Railroad. If unowned, you may buy it from the Bank. \
-        If owned, pay wonder twice the rental to which they are otherwise entitled'],
+        If owned, pay owner twice the rental to which they are otherwise entitled'],
         ['Advance to the nearest Railroad. If unowned, you may buy it from the Bank. \
-        If owned, pay wonder twice the rental to which they are otherwise entitled'],
+        If owned, pay owner twice the rental to which they are otherwise entitled'],
         ['Advance token to nearest Utility. If unowned, you may buy it from the Bank. \
         If owned, throw dice and pay owner a total ten times amount thrown.'],
-        ['Bank pays you dividend of $50', 50]
+        ['Bank pays you dividend of $50', 50],
         ['Get Out of Jail Free'],
         ['Go Back 3 Spaces'],
-        ['Go to Jail. Go directly to Jail, do not pass Go, do not collect $200',]
+        ['Go to Jail. Go directly to Jail, do not pass Go, do not collect $200'],
         ['Make general repairs on all your property. For each house pay $25. \
-        For each hotel pay $100', 25, 100]
-        ['Speeding fine $15', 15]
-        ['Take a trip to Reading Railroad. If you pass Go, collect $200', 200]
-        ['You have been elected Chairman of the Board. Pay each player $50', 50]
+        For each hotel pay $100', 25, 100],
+        ['Speeding fine $15', 15],
+        ['Take a trip to Reading Railroad. If you pass Go, collect $200', 200],
+        ['You have been elected Chairman of the Board. Pay each player $50', 50],
         ['Your building loan matures. Collect $150', 150]
         ]
 
@@ -206,29 +206,22 @@ class Deed(object):
             self.house_level += 1
 
 
-class Chance(object):
-    def __init__(self, CommunityCard):
+class Cards(object):
+    def __init__(self, Cards):
+        self.cards = Cards
         self.deck = self.shuffle()
+        self.holder = []
 
     def draw(self):
+        if self.deck == []:
+            self.deck = self.shuffle()
         card = self.deck.pop()
         return card
 
     def shuffle(self):
-        self.deck = random.shuffle(CommunityCard)
-        return self.deck
-
-
-class Community(object):
-    def __init__(self, CommunityCard):
-        self.deck = self.shuffle()
-
-    def draw(self):
-        card = self.deck.pop()
-        return card
-
-    def shuffle(self):
-        self.deck = random.shuffle(ChanceCard)
+        for i in range(len(self.cards)):
+            self.holder.append(i)
+        self.deck = random.shuffle(self.holder)
         return self.deck
 
 
@@ -270,6 +263,8 @@ class player(object):
             if len(self.deed_owned) < 0:
                 self.bankrupt_flag = True
                 self.bankrupt()
+            else:
+                Deed.sell(input, self)
         else:
             self.bal -= amount
 
@@ -329,7 +324,7 @@ def Run():
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print("test",event.type)
+                # print("test",event.type)
                 running = False
         screen.fill(color['white'])
         Button(screen, color)
