@@ -561,7 +561,10 @@ class button(object):
             if pygame.mouse.get_pressed()[0]:
                 if self.rect.collidepoint(x, y):
                     if self.title == 'Start Game':
-                        display.StartGame()
+                        if len(players) == 0:
+                            display.Text(x, y, 'Add a player!', 'Arial')
+                        else:
+                            display.StartGame()
 
                     if self.title == 'Roll Dice':
                         player.move(player[turn])
