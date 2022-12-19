@@ -47,7 +47,7 @@ def initialise_board():
         ['Property', 'Connecticut Avenue', 'cyan', 120, \
          [8, 40, 100, 300, 450, 600], 50, 'Bank', 0],
         ['Jail', 'Go to Jail/Just Visiting'],
-        ['Property', 'St. Charles Place', 'pink', 140, \
+        ['Property', 'St.Charles Place', 'pink', 140, \
          [10, 50, 150, 450, 625, 750], 100, 'Bank', 0],
         ['Utility', 'Electric Company', 150, 'Bank'],
         ['Property', 'States Avenue', 'pink', 140, \
@@ -55,7 +55,7 @@ def initialise_board():
         ['Property', 'Virginia Avenue', 'pink', 160, \
          [12, 60, 180, 500, 700, 900], 100, 'Bank', 0],
         ['Station', 'Pennsylvania Railroad', 200, 'Bank'],
-        ['Property', 'St. James Place', 'orange', 180, \
+        ['Property', 'St.James Place', 'orange', 180, \
          [14, 70, 200, 550, 750, 950], 100, 'Bank', 0],
         ['Card', 'Community Chest'],
         ['Property', 'Tennessee Avenue', 'orange', 180, \
@@ -70,7 +70,7 @@ def initialise_board():
          [18, 90, 250, 700, 875, 1050], 150, 'Bank'],
         ['Property', 'Illinois Avenue', 'red', 240, \
          [20, 100, 300, 750, 925, 1100], 150, 'Bank'],
-        ['Station', 'B & O Railroad', 200, 'Bank'],
+        ['Station', 'B&O Railroad', 200, 'Bank'],
         ['Property', 'Atlantic Avenue', 'yellow', 260, \
          [22, 110, 330, 800, 975, 1150], 150, 'Bank'],
         ['Property', 'Ventnor Avenue', 'yellow', 260, \
@@ -139,12 +139,10 @@ def initialise_board():
 
     go = Title(game_board[0])
     med_ave = Title(game_board[1])
-    # comm_chest = Cards(Comm_cards)
     baltic_ave = Title(game_board[3])
     income_tax = Title(game_board[4])
     reading_rr = Title(game_board[5])
     orient_ave = Title(game_board[6])
-    # chance = Cards(game_board[7])
     vermont_ave = Title(game_board[8])
     conn_ave = Title(game_board[9])
     jail = Title(game_board[10])
@@ -154,12 +152,10 @@ def initialise_board():
     virginia_ave = Title(game_board[14])
     penn_rr = Title(game_board[15])
     st_james = Title(game_board[16])
-    # comm_chest = Cards(game_board[17])
     ten_ave = Title(game_board[18])
     ny_ave = Title(game_board[19])
     free_parking = Title(game_board[20])
     kentucky_ave = Title(game_board[21])
-    # chance = Cards(game_board[22])
     indiana_ave = Title(game_board[23])
     illinois_ave = Title(game_board[24])
     bno_rr = Title(game_board[25])
@@ -167,13 +163,11 @@ def initialise_board():
     ventnor_ave = Title(game_board[27])
     water_works = Title(game_board[28])
     marvin_gardens = Title(game_board[29])
-    go_to_jail = game_board[30]
+    go_to_jail = Title(game_board[30])
     pacific_ave = Title(game_board[31])
     nc_ave = Title(game_board[32])
-    # comm_chest = Cards(game_board[33])
     penn_ave = Title(game_board[34])
     short_rr = Title(game_board[35])
-    # chance = Cards(game_board[36])
     park_place = Title(game_board[37])
     luxury_tax = Title(game_board[38])
     boardwalk = Title(game_board[39])
@@ -226,50 +220,6 @@ def initialise_board():
 
     return board
 
-def CommunityCard():
-    return [
-        'Advance to Go (Collect $200)',
-        'Bank error in your favor. Collect $200',
-        'Doctor’s fee. Pay $50',
-        'From sale of stock you get $50',
-        'Get Out of Jail Free',
-        'Go to Jail. Go directly to jail, do not pass Go, do not collect $200',
-        'Holiday fund matures. Receive $100',
-        'Income tax refund. Collect $20',
-        'It is your birthday. Collect $10 from every player',
-        'Life insurance matures. Collect $100',
-        'Pay hospital fees of $100',
-        'Pay school fees of $50',
-        'Receive $25 consultancy fee',
-        'You are assessed for street repair. $40 per house. $115 per hotel',
-        'You have won second prize in a beauty contest. Collect $10',
-        'You inherit $100'
-        ]
-
-def ChanceCard():
-    return [
-        'Advance to Boardwalk',
-        'Advance to Go (Collect $200)',
-        'Advance to Illinois Avenue. If you pass Go, collect $200',
-        'Advance to St. Charles Place. If you pass Go, collect $200',
-        'Advance to the nearest Railroad. If unowned, you may buy it from the Bank. \
-        If owned, pay owner twice the rental to which they are otherwise entitled',
-        'Advance to the nearest Railroad. If unowned, you may buy it from the Bank. \
-        If owned, pay owner twice the rental to which they are otherwise entitled',
-        'Advance token to nearest Utility. If unowned, you may buy it from the Bank. \
-        If owned, throw dice and pay owner a total ten times amount thrown.',
-        'Bank pays you dividend of $50',
-        'Get Out of Jail Free',
-        'Go Back 3 Spaces',
-        'Go to Jail. Go directly to Jail, do not pass Go, do not collect $200',
-        'Make general repairs on all your property. For each house pay $25. \
-        For each hotel pay $100',
-        'Speeding fine $15',
-        'Take a trip to Reading Railroad. If you pass Go, collect $200',
-        'You have been elected Chairman of the Board. Pay each player $50',
-        'Your building loan matures. Collect $150'
-        ]
-
 
 class Die(object):
     def __init__(self):
@@ -296,7 +246,7 @@ class Title(object):
     def __init__(self, location):
         self.type = location[0]
         self.name = location[1]
-        # self.color = 'white'
+        self.color = 'white'
 
         if self.type == 'Property':
             self.color = location[2]
@@ -341,6 +291,7 @@ class Title(object):
 
 class Cards(object):
     def __init__(self, Cards, name):
+        self.type = name
         self.cards = Cards
         self.name = name
         self.holder = []
@@ -370,13 +321,13 @@ class Cards(object):
 
 
 class player(object):
-    def __init__(self, playernumber, balance, property_owned, position):
-        self.number = playernumber
-        self.bal = balance
-        self.Title_owned = property_owned
+    def __init__(self, playername):
+        self.name = playername
+        self.bal = 1500
+        self.Title_owned = []
         self.railroad_own = 0
         self.utility_own = 0
-        self.pos = position
+        self.pos = 0
         self.double_count = 0
         self.jail_free_card = 0
         self.turn_in_jail = 0
@@ -412,7 +363,7 @@ class player(object):
         else:
             self.bal -= amount
 
-    def jail(self):
+    def to_jail(self):
         self.pos = 10
         self.double_count = 0
         self.jail_flag = True
@@ -431,6 +382,8 @@ class player(object):
             self.jail_flag == False
             self.turn_in_jail = 0
 
+        return self.jail_flag
+
     def get_jail_free_card(self):
         self.jail_free_card += 1
 
@@ -441,6 +394,7 @@ class player(object):
 
     def bankrupt(self):
         self.bal = 0
+        self.bankrupt_flag = True
         if len(self.Title_owned) != 0:
             for Title in self.Title_owned:
                 Title.owner = 'Bank'
@@ -450,10 +404,9 @@ class game_display(object):
     def __init__(self, screen, color, board):
         self.color = color
         self.screen = screen
-        # pygame.draw.rect(screen, color['cyan'], [190,200,75,35])
-        titlefont = pygame.font.SysFont('Corbel', 20)
-        # text = smallfont.render('test', True, color['black'])
-        # screen.blit(text, (200, 200))
+        self.board = board
+        self.titlefont = pygame.font.SysFont('Corbel', 10)
+        self.Statfont = pygame.font.SysFont('Times New Roman', 20)
 
     def draw_map(self):
         x = 90 # Width of corner square
@@ -462,12 +415,90 @@ class game_display(object):
                                         [(x, x), (720 - x, x), (720 - x, 720 - x), (x, 720 - x)])
         pygame.draw.lines(self.screen, 'black', True, \
                                         [(0, 0), (720, 0), (720, 720), (0, 720)])
+        pygame.draw.rect(self.screen, 'yellow', pygame.Rect(721, 0, 560, 720))
 
         for i in range(10):
             pygame.draw.line(self.screen, 'black', (x, x + i*y), (x - x, x + i*y))
             pygame.draw.line(self.screen, 'black', (x + i*y, x), (x + i*y, x - x))
             pygame.draw.line(self.screen, 'black', (720 - x, x + i*y), (720 - x + x, x + i*y))
             pygame.draw.line(self.screen, 'black', (x + i*y, 720 - x), (x + i*y, 720 - x + x))
+
+            
+
+            if i == 0:
+                text1 = self.titlefont.render(self.board[0].name, True, self.color['black'])
+                text1_rect = text1.get_rect(center = (720 - x//2, (720 -x//2)))
+                text2 = self.titlefont.render(self.board[10].name, True, self.color['black'])
+                text2_rect = text2.get_rect(center = (x//2, (720 -x//2)))
+                text3 = self.titlefont.render(self.board[20].name, True, self.color['black'])
+                text3_rect = text3.get_rect(center = (x//2, x//2))
+                text4 = self.titlefont.render(self.board[30].name, True, self.color['black'])
+                text4_rect = text4.get_rect(center = (720 - x//2, x//2))
+
+                self.screen.blit(text1, text1_rect)
+                self.screen.blit(text2, text2_rect)
+                self.screen.blit(text3, text3_rect)
+                self.screen.blit(text4, text4_rect)
+
+            else:
+                words1 = self.board[0 + i].name.split(' ')
+                words2 = self.board[10 + i].name.split(' ')
+                words3 = self.board[20 + i].name.split(' ')
+                words4 = self.board[30 + i].name.split(' ')
+
+                for k in range(len(words1)):
+                    text = self.titlefont.render(words1[k], True, self.color['black'])
+                    text_rect = text.get_rect(center = ((720 - x - y//2) - (i - 1)*y, (720 - x//2) + k * 10))
+                    self.screen.blit(text, text_rect)
+
+                for k in range(len(words2)):
+                    text = self.titlefont.render(words2[k], True, self.color['black'])
+                    text_rect = text.get_rect(center = ((x//2), (720 - x - y//2) - (i - 1) * y + k * 10))
+                    self.screen.blit(text, text_rect)
+
+                for k in range(len(words3)):
+                    text = self.titlefont.render(words3[k], True, self.color['black'])
+                    text_rect = text.get_rect(center = ((720 - x - y//2) - (i - 1)*y, (x//2) + k * 10))
+                    self.screen.blit(text, text_rect)
+
+                for k in range(len(words4)):
+                    text = self.titlefont.render(words4[k], True, self.color['black'])
+                    text_rect = text.get_rect(center = ((720 - x//2) , (x + y//2) + (i - 1) * y + k * 10))
+                    self.screen.blit(text, text_rect)
+
+            if self.board[i].type == 'Property':
+                pygame.draw.rect(self.screen, self.board[i].color, \
+                                 pygame.Rect((720 - x - y + 1) - (i - 1) * y, (720 - x + 1) , y - 1, x // 5 ))
+            if self.board[10 + i].type == 'Property':
+                pygame.draw.rect(self.screen, self.board[10 + i].color, \
+                                 pygame.Rect((x - x//5), (720 - x - y +1) - (i - 1) * y, x//5, y - 1))
+            if self.board[20 + i].type == 'Property':
+                pygame.draw.rect(self.screen, self.board[20 + i].color, \
+                                 pygame.Rect(x + 1 + (i - 1) * y, x * 4/5 , y - 1, x // 5 ))
+            if self.board[30 + i].type == 'Property':
+                pygame.draw.rect(self.screen, self.board[30 + i].color, \
+                                 pygame.Rect((720 - x + 1), (x + 1) + (i - 1) * y, x//5, y - 1))
+
+    def player_display(self, player, n):
+        for i in range(n):
+            pygame.draw.rect(self.screen, 'white', pygame.Rect(800, 120 + i * 40, 400, 30))
+            pygame.draw.rect(self.screen, 'black', pygame.Rect(800, 120 + i * 40, 400, 30), 2)
+            text = "Player: " + player[i].name
+            name = self.Statfont.render(text, True, 'black')
+            text = '   $' + str(player[i].bal)
+            balance = self.Statfont.render(text, True, 'black')
+            self.screen.blit(name, (805, 126 + i * 40))
+            name_width = name.get_width()
+            self.screen.blit(balance, (805 + name_width, 126 + i * 40))
+
+            if player[i].jail_flag == True:
+                text = self.Statfont.render('In Jail', True, 'red')
+                self.screen.blit(text, (1100, 126 + i * 40))
+
+            if player[i].bankrupt_flag == True:
+                text = self.Statfont.render('Bankrupt!', True, 'red')
+                self.screen.blit(text, (1100, 126 + i * 40))
+
 
 
 
@@ -484,15 +515,15 @@ def Run():
 
     
     while running:
-        clock.tick(10)
+        clock.tick(30)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                # print("test",event.type)
                 running = False
         screen.fill(color['white'])
         display = game_display(screen, color, board)
         display.draw_map()
+        display.player_display(players, len(players))
         # pygame.display.flip()
         pygame.display.update()
 
@@ -500,7 +531,15 @@ def Run():
 
 
 if __name__ == '__main__':
+    players = []
+    players.append(player('1'))
+    players.append(player('2'))
+    players.append(player('pPpgDd'))
+    players[1].to_jail()
+    players[2].bankrupt()
+
+
     pygame.init()
     Run()
     pygame.quit()
-    print('test run')
+    print('test run end')
