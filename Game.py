@@ -140,7 +140,6 @@ def ChanceCard():
         ]
 
 
-
 class Die(object):
     def __init__(self):
         self.roll_history = []
@@ -207,6 +206,31 @@ class Deed(object):
             self.house_level += 1
 
 
+class Chance(object):
+    def __init__(self, CommunityCard):
+        self.deck = self.shuffle()
+
+    def draw(self):
+        card = self.deck.pop()
+        return card
+
+    def shuffle(self):
+        self.deck = random.shuffle(CommunityCard)
+        return self.deck
+
+
+class Community(object):
+    def __init__(self, CommunityCard):
+        self.deck = self.shuffle()
+
+    def draw(self):
+        card = self.deck.pop()
+        return card
+
+    def shuffle(self):
+        self.deck = random.shuffle(ChanceCard)
+        return self.deck
+
 
 class player(object):
     def __init__(self, playernumber, balance, property_owned, position):
@@ -217,6 +241,7 @@ class player(object):
         self.utility_own = 0
         self.pos = position
         self.double_count = 0
+        self.jail_free_card = 0
         self.turn_in_jail = 0
         self.bankrupt_flag = False
         self.jail_flag = False
@@ -267,6 +292,13 @@ class player(object):
             self.jail_flag == False
             self.turn_in_jail = 0
 
+    def get_jail_free_card(self):
+        self.jail_free_card += 1
+
+    def use_jail_free_card(self):
+        self.jail_free_card -= 1
+        self.jail_flag = False
+        self.turn_in_jail = 0
 
     def bankrupt(self):
         self.bal = 0
@@ -275,14 +307,12 @@ class player(object):
                 deed.owner = 'Bank'
 
 
-
-
-# class Button(object):
-#     def __init__(self, screen, color):
-#         pygame.draw.rect(screen, color['cyan'], [190,200,75,35])
-#         smallfont = pygame.font.SysFont('Times New Roman',35)
-#         text = smallfont.render('test', True, color['black'])
-#         screen.blit(text, (200, 200))
+class Button(object):
+    def __init__(self, screen, color):
+        pygame.draw.rect(screen, color['cyan'], [190,200,75,35])
+        smallfont = pygame.font.SysFont('Times New Roman',35)
+        text = smallfont.render('test', True, color['black'])
+        screen.blit(text, (200, 200))
 
 def Run():
     size = [1280, 720]
@@ -312,5 +342,3 @@ if __name__ == '__main__':
     pygame.init()
     Run()
     pygame.quit()
-
-
