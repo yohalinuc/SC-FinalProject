@@ -60,7 +60,7 @@ def initialise_board():
         ['Card', 'Community Chest'],
         ['Property', 'Tennessee Avenue', 'orange', 180, \
          [14, 70, 200, 550, 750, 950], 100, 'Bank', 0],
-        ['Property', 'New York Avenue', 'orange', 200, \
+        ['Property', 'NewYork Avenue', 'orange', 200, \
          [16, 80, 220, 600, 800, 1000], 100, 'Bank', 0],
         ['Stop', 'Free Parking'],
         ['Property', 'Kentucky Avenue', 'red', 220, \
@@ -242,6 +242,10 @@ class Die(object):
 
         return value, double
 
+    def display_result(self):
+        None
+
+
 class Title(object):
     def __init__(self, location):
         self.type = location[0]
@@ -347,6 +351,13 @@ class player(object):
     def check_pos(self, board):
         self.pos = self.pos % 40
         locale = board[self.pos]
+        if locale.type == 'Property':
+            if locale.owner == 'Bank':
+                locale.buy()
+            else:
+                self.take_money(locale.rent[locale.house_level])
+                locale.owner.add_money(locale.rent[locale.house_level])
+
         return locale
 
     def add_money(self, amount):
@@ -407,6 +418,13 @@ class game_display(object):
         self.board = board
         self.titlefont = pygame.font.SysFont('Corbel', 10)
         self.Statfont = pygame.font.SysFont('Times New Roman', 20)
+        self.GameStart = False
+
+    def StartGame(self):
+        self.GameStart = True
+
+    def EndGame(self):
+        self.GameStart = False
 
     def draw_map(self):
         x = 90 # Width of corner square
@@ -499,9 +517,45 @@ class game_display(object):
                 text = self.Statfont.render('Bankrupt!', True, 'red')
                 self.screen.blit(text, (1100, 126 + i * 40))
 
+    def player_piece(self, player):
+        None
+
+    def button(self, x, y, title, Font = 'Times New Roman', size = 30, Function = None):
+        self.Buttonfont = pygame.font.SysFont(Font, size)
+        text = self.Buttonfont.render(title, True, 'black')
+        button_width = text.get_width()
+        button_height = text.get_height()
+        pygame.draw.rect(self.screen, 'cyan', \
+                         pygame.Rect(x - 5, y, button_width + 10, button_height))
+        pygame.draw.rect(self.screen, 'black', \
+                         pygame.Rect(x - 5, y, button_width + 10, button_height), 1)
+        self.screen.blit(text, (x, y))
+
+    def addimage(self, link, x, y):
+         img = pygame.image.load(link)
+         self.screen.blit(img, [x,y])
+
+    def Text(self, x, y, text, Font = 'Times New Roman', size = 30, alpha = 255):
+        font = pygame.font.SysFont(Font, size)
+        msg = font.render(text, True, 'black')
+        msg.set_alpha(alpha)
+        self.screen.blit(msg, (x, y - size))
+
+class button_func(object):
+    def __init__(self, x, y, width, height):
+
+        return
 
 
-
+def load_dice_img():
+    img = []
+    img.append(pygame.image.load('img/dice1.png'))
+    img.append(pygame.image.load('img/dice1.png'))
+    img.append(pygame.image.load('img/dice1.png'))
+    img.append(pygame.image.load('img/dice1.png'))
+    img.append(pygame.image.load('img/dice1.png'))
+    img.append(pygame.image.load('img/dice1.png'))
+    return img
 
 def Run():
     size = [1280, 720]
@@ -512,18 +566,42 @@ def Run():
     clock = pygame.time.Clock()
     color = colors()
     board = initialise_board()
+    alpha = 255
+    dice_img = load_dice_img()
 
-    
     while running:
         clock.tick(30)
-        
+        print(clock.get_time())
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
         screen.fill(color['white'])
         display = game_display(screen, color, board)
         display.draw_map()
-        display.player_display(players, len(players))
+
+        mouse = pygame.mouse.get_pos() # Returns mouse cursor coordinates
+        click = pygame.mouse.get_pressed() # Returns boolean of mouse clicks
+
+
+        if display.GameStart == True:
+            display.button(200, 200, 'Roll Dice', size = 25)
+            display.button(400, 200, 'End  Turn', size = 25)
+            display.button(300, 500, 'End  Game')
+            display.player_display(players, len(players))
+
+        if display.GameStart == False:
+            display.button(300, 360, 'Game Start')
+            # if
+
+        if click[0] == 1:
+                alpha = max(0, alpha - 15)
+                display.Text(mouse[0], mouse[1], 'click!', 'Arial', alpha = alpha)
+        else:
+            alpha = 255
+
+
+
         # pygame.display.flip()
         pygame.display.update()
 
