@@ -337,6 +337,7 @@ class player(object):
         self.turn_in_jail = 0
         self.bankrupt_flag = False
         self.jail_flag = False
+        self.turn = 0
 
     def move(self):
         steps, double = Die()
@@ -346,6 +347,7 @@ class player(object):
             if self.double_count == 3:
                 self.jail()
         self.pos += steps
+        self.turn += 1
         return self.pos
 
     def check_pos(self, board):
@@ -426,8 +428,7 @@ class game_display(object):
         return self.GameStart
 
     def EndGame(self):
-        self.GameStart = False
-        return self.GameStart
+        return True
 
     def draw_map(self):
         x = 90 # Width of corner square
@@ -536,7 +537,7 @@ class game_display(object):
 
 class button(object):
     def __init__(self, screen, x, y, title, Font = 'Times New Roman', size = 30, color = 'cyan'):
-        global display
+        # global display
         self.screen = screen
         self.Buttonfont = pygame.font.SysFont(Font, size)
         self.x = x
@@ -562,6 +563,14 @@ class button(object):
                     if self.title == 'Start Game':
                         display.StartGame()
 
+                    if self.title == 'Roll Dice':
+                        player.move(player[turn])
+
+                    if self.title == 'End Turn':
+                        player.turn += 1
+
+                    if self.title == 'Add Player':
+                        players.append(player(str(len(players) + 1)))
 
 def load_dice_img():
     img = []
@@ -584,7 +593,10 @@ def Run():
     board = initialise_board()
     alpha = 255
     dice_img = load_dice_img()
-    global display
+
+    global display, players, turn
+    players = []
+    turn = 0
     display = game_display(screen, color, board)
     
     while running:
@@ -625,6 +637,13 @@ def Run():
             Start_button.show()
             Start_button.click(event)
 
+            if len(players) < 4:
+                Add_Player = button(screen, 800, 300, 'Add Player', size = 50)
+                Add_Player.show()
+                Add_Player.click(event)
+            else:
+                display.Text(800, 300, 'Max number of players: 4')
+
 
         # if click[0] == 1:
         #         alpha = max(0, alpha - 15)
@@ -639,9 +658,9 @@ def Run():
 
 
 if __name__ == '__main__':
-    players = []
-    players.append(player('1'))
-    players.append(player('2'))
+    # players = []
+    # players.append(player('1'))
+    # players.append(player('2'))
 
 
 
