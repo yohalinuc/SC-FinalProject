@@ -5,9 +5,9 @@ import pygame
 
 def colors():
     '''
-    Returns
-    dictionary of colors used for game board
-
+    **Returns**
+        colors_map: *dict, int, tuple*
+            dictionary of colors used for drawing game board
     '''
     return {
         'red':(255, 0, 0),
@@ -25,10 +25,21 @@ def colors():
 def initialise_board():
     '''
     Initialise the game board locations and ownerships
-    Returns
-    -------
-    list of locations on game board and information as provided by game
 
+    Parameters
+    ----------
+        game_board: *list, str, int*
+            list of list of information provided by the game
+        Comm_cards: *list*
+            list of str for community cards
+        Chance_cards: *list*
+            list of str for chance cards
+        
+
+    Return
+    ------
+        board: *list*
+            list of objects representing locations on game board
     '''
     game_board = [
         ['Start', 'Go', 200],
@@ -217,18 +228,41 @@ def initialise_board():
         luxury_tax,
         boardwalk
         ]
-
     return board
 
 
 class Die(object):
     def __init__(self):
+        '''
+        This function simulates rolling of 2 dice
+        Parameters
+        ----------
+        roll_history: *list*
+            Stores values rolled as list
+        '''
         self.roll_history = []
 
-    def __str__(self):
-        return f"Roll: {self.roll_history[-1]}"
-
     def roll(self):
+        '''
+        This function generates values from rolling 2 dices
+        Parameters
+        ----------
+        value: *int*
+            For holding total rolled value
+        double: *bool*
+            boolean for if both dice rolled the same value
+        roll1: *int*
+            first dice roll number
+        roll2: *int*
+            second dice roll number
+
+        Return
+        ------
+        value: *int*
+            Total rolled value
+        double : *bool*
+            True if if both dice rolled the same value
+        '''
         value = 0
         double = False
 
@@ -237,17 +271,40 @@ class Die(object):
         if roll1 == roll2:
             double = True
         value = roll1 + roll2
-        # value = random.randint(1, 6)
         self.roll_history.append(value)
 
         return value, double
 
-    def display_result(self):
-        None
-
-
 class Title(object):
     def __init__(self, location):
+        '''
+        Generate a object for locations on game board
+
+        Parameters
+        ----------
+        location : *list, str, int*
+            Stores base information from game board
+        
+        type: *str*
+            Type of location on the board
+        name: *str*
+            Name of location on the board
+        color: *str*
+            color of property
+        Title_cost: *int*
+            cost of location
+        rents: *list, int*
+            rent of property depending on house built from lowest to highest
+        owner: *str, object*
+            owner of property. Bank *str* owns by default, players are object class
+        house_level: *int*
+            number of houses built, 5 = hotel in game
+
+        Returns
+        -------
+        None.
+
+        '''
         self.type = location[0]
         self.name = location[1]
         self.color = 'white'
@@ -259,12 +316,20 @@ class Title(object):
             self.house_cost = location[5]
             self.owner = location[6]
             self.house_level = 0
-        if self.type == 'Station':
+        if self.type == 'Station' or self.type == 'Utility':
             self.Title_cost = location[2]
             self.owner = location[3]
 
 
     def buy(self, player):
+        '''
+        Function changes owner and reduce player money
+
+        Parameters
+        ----------
+        None
+
+        '''
         if self.Title_cost > player.bal:
             print('unaffordable')
         else:
@@ -277,6 +342,15 @@ class Title(object):
                 player.utility_own += 1
 
     def sell(self, player):
+        '''
+        Function returns owner to default and increase player money
+
+        Parameters
+        ----------
+        None
+
+
+        '''
         self.owner = 'Bank'
         player.add_money(self.Title_cost)
         if self.type == 'Station':
@@ -285,16 +359,43 @@ class Title(object):
             player.utility_own -= 1
 
     def build_house(self, player):
+        '''
+        Function increase house_level in exchange for player money
+
+        Parameters
+        ----------
+
+
+        '''
+
         if self.house_cost > player.bal:
             print('unaffordable')
         elif self.house_level == 5:
             self.max_houses = True
         else:
             self.house_level += 1
+            player.take_money(self.house_cost)
 
 
 class Cards(object):
     def __init__(self, Cards, name):
+        '''
+        Function simulate a deck of cards
+
+        Parameters
+        ----------
+        Cards: *list, str*
+            list of cards
+        name: *str*
+            Name of the deck of card ie 'Chance' or 'Community Chest'
+        type: *str*
+            type of location on the board
+
+        Returns
+        -------
+        None
+
+        '''
         self.type = name
         self.cards = Cards
         self.name = name
@@ -302,6 +403,15 @@ class Cards(object):
         self.deck = []
 
     def draw_card(self):
+        '''
+        Picks a value refering to a card in the deck 
+
+        Returns
+        -------
+        card : *int*
+            number representing the card in the list of cards
+
+        '''
         if self.deck == []:
             self.deck = self.shuffle()
         card = self.deck.pop()
@@ -309,16 +419,38 @@ class Cards(object):
         return card
 
     def shuffle(self):
+        '''
+        Creates a representation of a list of card and shuffles it
+
+        Returns
+        -------
+        deck : *list, int*
+            list of numbers to refer to the deck of cards
+
+        '''
         for i in range(len(self.cards)):
             self.holder.append(i)
         self.deck = random.shuffle(self.holder)
         return self.deck
 
     def read_card(self, card):
+        '''
+        Takes the card drawn and reads the card
+
+        Returns
+        -------
+        card_text: *str*
+            description of card
+
+        '''
         self.card_text = self.cards[card]
         return self.card_text
 
     def card_effect(self, card, player):
+        '''
+        Function to implement effect of card drawn *Incomplete
+
+        '''
         if self.name == 'Chance':
             if card == 1:
                 print(1)
@@ -326,6 +458,35 @@ class Cards(object):
 
 class player(object):
     def __init__(self, playername):
+        '''
+        
+
+        Parameters
+        ----------
+        bal : *int*
+            balance of player
+        Title_owned: *list*
+            list of titles owned
+        railroad_owned: *int*
+            number of railroads owned
+        utility_own: *int*
+            number of utility own
+        pos: *int*
+            current position on board
+        double_count: *int*
+            counting how many consequtive double rolls
+        jail_free_card: *int*
+            number of jail free card
+        bankrupt_flag: *bool*
+            bankrupt status
+        jail_flag: *bool*
+            jail status
+
+
+        Returns
+        -------
+
+        '''
         self.name = playername
         self.bal = 1500
         self.Title_owned = []
@@ -340,17 +501,33 @@ class player(object):
         self.turn = 0
 
     def move(self):
-        steps, double = Die()
-        
+        '''
+        Changes player position by dice roll
+
+        Returns
+        -------
+
+
+        '''
+
+        steps, double = Die.roll()
         if double == True:
             self.double_count += 1
             if self.double_count == 3:
                 self.jail()
         self.pos += steps
         self.turn += 1
-        return self.pos
+
 
     def check_pos(self, board):
+        '''
+        Check player position for location effects
+
+        Returns
+        -------
+        None.
+
+        '''
         self.pos = self.pos % 40
         locale = board[self.pos]
         if locale.type == 'Property':
@@ -360,13 +537,26 @@ class player(object):
                 self.take_money(locale.rent[locale.house_level])
                 locale.owner.add_money(locale.rent[locale.house_level])
 
-        return locale
-
     def add_money(self, amount):
+        '''
+        Adds player balance 
+
+        Returns
+        -------
+
+
+        '''
         self.bal += amount
-        return self.bal
 
     def take_money(self, amount):
+        '''
+        Reduce player balance 
+
+        Returns
+        -------
+
+
+        '''
         if self.bal < amount:
             if len(self.Title_owned) < 0:
                 self.bankrupt_flag = True
@@ -377,11 +567,21 @@ class player(object):
             self.bal -= amount
 
     def to_jail(self):
+        '''
+        Moves player to jail and set jail status
+        '''
         self.pos = 10
         self.double_count = 0
         self.jail_flag = True
 
     def jail_check(self):
+        '''
+        Checks jail status
+
+        Returns
+        -------
+
+        '''
         if self.turn_in_jail < 3:
             dice = Die()
             val, double = dice.roll()
@@ -395,17 +595,30 @@ class player(object):
             self.jail_flag == False
             self.turn_in_jail = 0
 
-        return self.jail_flag
 
     def get_jail_free_card(self):
+        '''
+        add jail free card
+        '''
         self.jail_free_card += 1
 
     def use_jail_free_card(self):
+        '''
+        Escapes jail using card
+
+        Returns
+        -------
+        None.
+
+        '''
         self.jail_free_card -= 1
         self.jail_flag = False
         self.turn_in_jail = 0
 
     def bankrupt(self):
+        '''
+        banrupt player
+        '''
         self.bal = 0
         self.bankrupt_flag = True
         if len(self.Title_owned) != 0:
@@ -415,6 +628,9 @@ class player(object):
 
 class game_display(object):
     def __init__(self, screen, color, board):
+        '''
+        Function drawns the GUI for the game
+        '''
         self.color = color
         self.screen = screen
         self.board = board
@@ -529,51 +745,56 @@ class game_display(object):
          img = pygame.image.load(link)
          self.screen.blit(img, [x,y])
 
-    def Text(self, x, y, text, Font = 'Times New Roman', size = 30, alpha = 255):
+    def Text(self, x, y, text, Font = 'Times New Roman', size = 30, alpha = 255, color = 'black'):
         font = pygame.font.SysFont(Font, size)
-        msg = font.render(text, True, 'black')
+        msg = font.render(text, True, color)
         msg.set_alpha(alpha)
         self.screen.blit(msg, (x, y - size))
 
 class button(object):
-    def __init__(self, screen, x, y, title, Font = 'Times New Roman', size = 30, color = 'cyan'):
+    def __init__(self, screen, x, y, title, Font = 'Times New Roman', size = 30, color = 'cyan', playernum = 0):
         # global display
         self.screen = screen
-        self.Buttonfont = pygame.font.SysFont(Font, size)
         self.x = x
         self.y = y
         self.title = title
+        self.Buttonfont = pygame.font.SysFont(Font, size)
         self.text = self.Buttonfont.render(title, True, 'black')
+        self.color = color
         self.button_width = self.text.get_width()
         self.button_height = self.text.get_height()
-        pygame.draw.rect(self.screen, color, \
-                         pygame.Rect(x - 5, y, self.button_width + 10, self.button_height))
-        pygame.draw.rect(self.screen, 'black', \
-                         pygame.Rect(x - 5, y, self.button_width + 10, self.button_height), 1)
-        self.rect = pygame.Rect(self.x, self.y, self.button_width, self.button_height)
 
     def show(self):
+        pygame.draw.rect(self.screen, self.color, \
+                         pygame.Rect(self.x - 5, self.y, self.button_width + 10, self.button_height))
+        pygame.draw.rect(self.screen, 'black', \
+                         pygame.Rect(self.x - 5, self.y, self.button_width + 10, self.button_height), 1)
+        self.rect = pygame.Rect(self.x, self.y, self.button_width, self.button_height)
+
         self.screen.blit(self.text, (self.x, self.y))
 
-    def click(self, event):
+    def click(self, event, time = 0):
         x, y = pygame.mouse.get_pos()
         if event.type == pygame.MOUSEBUTTONDOWN:
             if pygame.mouse.get_pressed()[0]:
                 if self.rect.collidepoint(x, y):
                     if self.title == 'Start Game':
                         if len(players) == 0:
-                            display.Text(x, y, 'Add a player!', 'Arial')
+                            display.Text(x, y, 'Add a player!', 'Arial', color = 'red')
                         else:
                             display.StartGame()
-
+    
                     if self.title == 'Roll Dice':
-                        player.move(player[turn])
-
+                        player.move(player[self.playernum])
+    
                     if self.title == 'End Turn':
                         player.turn += 1
-
+    
                     if self.title == 'Add Player':
                         players.append(player(str(len(players) + 1)))
+                        if time > 0:
+                            display.Text(self.x, self.y, '+ 1 Player')
+                            time -= 1
 
 def load_dice_img():
     img = []
@@ -587,34 +808,29 @@ def load_dice_img():
 
 def Run():
     size = [1280, 720]
-    
+    global display, players, turn
+
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Monopoly Board Game")
     running = True
     clock = pygame.time.Clock()
     color = colors()
     board = initialise_board()
-    alpha = 255
-    dice_img = load_dice_img()
 
-    global display, players, turn
     players = []
     turn = 0
     display = game_display(screen, color, board)
-    
+
     while running:
         clock.tick(10)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
         screen.fill(color['white'])
 
         display.draw_map()
-
-        mouse = pygame.mouse.get_pos() # Returns mouse cursor coordinates
-        click = pygame.mouse.get_pressed() # Returns boolean of mouse clicks
-        print(mouse)
 
         if display.GameStart == True:
             Move_Turn = button(screen, 200, 200, 'Roll Dice')
@@ -641,33 +857,20 @@ def Run():
             Start_button.click(event)
 
             if len(players) < 4:
+                display.Text(800, 300, 'Number of players: ' + str(len(players)))
                 Add_Player = button(screen, 800, 300, 'Add Player', size = 50)
                 Add_Player.show()
-                Add_Player.click(event)
+                Add_Player.click(event, time = 90)
             else:
                 display.Text(800, 300, 'Max number of players: 4')
 
-
-        # if click[0] == 1:
-        #         alpha = max(0, alpha - 15)
-        #         display.Text(mouse[0], mouse[1], 'click!', 'Arial', alpha = alpha)
-        # else:
-        #     alpha = 255
-
-        pygame.display.flip()
-        # pygame.display.update()
+        pygame.display.update()
 
     return
 
 
 if __name__ == '__main__':
-    # players = []
-    # players.append(player('1'))
-    # players.append(player('2'))
-
-
-
     pygame.init()
     Run()
     pygame.quit()
-    print('test run end')
+
